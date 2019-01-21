@@ -2,7 +2,7 @@
     "name": "satoblacksato/logincentral",
     "description": "Componente que realiza el login mediante un acceso por tokens proporcionado por un sitio central",
     "type": "project",
-    "license": "GPL",
+    "license": "MIT",
     "authors": [
         {
             "name": "Ernesto Liberio Vera",
