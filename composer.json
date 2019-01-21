@@ -1,0 +1,37 @@
+{
+    "name": "satoblacksato/logincentral",
+    "description": "Componente que realiza el login mediante un acceso por tokens proporcionado por un sitio central",
+    "type": "project",
+    "license": "GPL",
+    "authors": [
+        {
+            "name": "Ernesto Liberio Vera",
+            "email": "ernesto.liberio@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "require": {
+        "php" : ">=7.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Eliberio\\LoginCentral\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Eliberio\\LoginCentral\\Tests\\": "tests"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Eliberio\\LoginCentral\\LoginCentralServiceProvider"
+            ]
+        }
+    }
+}
