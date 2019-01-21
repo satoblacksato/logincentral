@@ -16,7 +16,7 @@ class LoginCentralServiceProvider extends ServiceProvider
     {
         $this->publishes([
             __DIR__.'/../logincentral.php' => config_path('logincentral.php')
-        ], 'config');
+        ], 'login-central-config');
 
     }
 

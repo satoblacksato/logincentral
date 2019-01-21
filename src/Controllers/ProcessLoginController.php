@@ -8,6 +8,7 @@
 namespace Eliberio\LoginCentral\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\User;
 use Illuminate\Http\Request;
 use PHPUnit\Util\ConfigurationGenerator;
 use DB;
@@ -27,25 +28,37 @@ class ProcessLoginController extends Controller
     public function login(Request $request)
     {
         $this->validate($request,[
-           'user_key'=>'required|in:'.config('logincentral.user_key'),
-           'pass_key'=>'required|in:'.config('logincentral.pass_key'),
-           'token'=>'required|exists:'.config('logincentral.connect_database').'.manager_access.token,token'
+            'user_key'=>'required|in:'.config('logincentral.user_key'),
+            'pass_key'=>'required',
+            'token'=>'required|exists:'.config('logincentral.connect_database').'.manager_access,token'
         ]);
 
+        if(($request->pass_key)!=config('logincentral.pass_key')){
+            abort(404,'Pass_KEY INCORRECTO');
+        }
+
         $data=DB::connection(config('logincentral.connect_database'))
-                ->table('users')
-                ->where('id',DB::connection(config('logincentral.connect_database'))
-                    ->table('manager_access')->where('token','=',$request->get('token'))->first())
-                ->first();
+            ->table('users')
+            ->where('id',optional(DB::connection(config('logincentral.connect_database'))
+                ->table('manager_access')->where('token','=',($request->get('token')))->first())->user_id)
+            ->first();
         if($data==null){
-            return response()->json(['No existe un Token de Validación Asignado'],404);
+            abort(404,'No existe un Token de Validación Asignado');
         }
+        $column=config('logincentral.column_merge');
+        $userSystem=User
+            ::where($column,'=',$data->$column)->first();
+        if($userSystem==null){
+            abort(404,'No existe usuario asociado al sistema');
+        }
+
         Auth::logout();
-        Auth::loginUsingId($data->id);
-        if(Auth::check()){
-            return response()->json("acceso correcto");
+        Auth::login($userSystem,true);
+        if (Auth::check()) {
+            return    redirect()->intended('/home');
         }
-        return response()->json(['No tienes autorización para ingresar al sistema'],401);
+        abort(401,'No tienes autorización para ingresar al sistema');
+
     }
 
     public function logout(Request $request)

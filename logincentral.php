@@ -8,7 +8,6 @@
 return [
   'user_key'=>'',
   'pass_key'=>'',
-  'url_service'=>'a',
   'connect_database'=>'',
     'column_merge'=>'email'
 ];
