@@ -27,46 +27,46 @@ class ProcessLoginController extends Controller
 
     public function login(Request $request)
     {
-        $this->validate($request,[
+
+       $this->validate($request,[
             'user_key'=>'required|in:'.config('logincentral.user_key'),
-            'pass_key'=>'required',
+            'pass_key'=>'required|in:'.config('logincentral.pass_key'),
             'token'=>'required|exists:'.config('logincentral.connect_database').'.manager_access,token'
         ]);
 
-        if(($request->pass_key)!=config('logincentral.pass_key')){
-            abort(404,'Pass_KEY INCORRECTO');
-        }
-
+        if(Auth::guard('web')->check()){
+            Auth::logout();
+        } 
+       
         $data=DB::connection(config('logincentral.connect_database'))
             ->table('users')
             ->where('id',optional(DB::connection(config('logincentral.connect_database'))
                 ->table('manager_access')->where('token','=',($request->get('token')))->first())->user_id)
             ->first();
+
         if($data==null){
             abort(404,'No existe un Token de Validación Asignado');
         }
+
         $column=config('logincentral.column_merge');
-        $userSystem=User
-            ::where($column,'=',$data->$column)->first();
-        if($userSystem==null){
+        $user = config('auth.providers.users.model')::where($column,'=',$data->$column)->first();
+        if($user==null){
             abort(404,'No existe usuario asociado al sistema');
         }
 
-        Auth::logout();
-        Auth::login($userSystem,true);
-        if (Auth::check()) {
-            return    redirect()->intended('/home');
-        }
-        abort(401,'No tienes autorización para ingresar al sistema');
-
+        Auth::guard('web')->login($user, true);
+        return redirect()->route('home');
     }
 
     public function logout(Request $request)
     {
+        $this->validate($request,[
+            'user_key'=>'required|in:'.config('logincentral.user_key'),
+            'pass_key'=>'required|in:'.config('logincentral.pass_key')
+        ]);
+
+
         Auth::logout();
-        if(!Auth::check()){
-            return response()->json("cierre de sesión es correcto");
-        }
-        return response()->json(['no puedes cerrar sesión en el sistema'],500);
+        return response()->json(['proceso de logout exitoso'],200);
     }
 }
