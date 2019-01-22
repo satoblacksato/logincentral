@@ -9,5 +9,6 @@ return [
   'user_key'=>'',
   'pass_key'=>'',
   'connect_database'=>'',
-    'column_merge'=>'email'
+    'column_merge'=>'email',
+    'main_url'=>''
 ];

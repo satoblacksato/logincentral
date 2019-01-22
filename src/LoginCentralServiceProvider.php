@@ -3,7 +3,7 @@
 namespace Eliberio\LoginCentral;
 
 use Illuminate\Support\ServiceProvider;
-
+use Auth;
 class LoginCentralServiceProvider extends ServiceProvider
 {
 
@@ -18,6 +18,7 @@ class LoginCentralServiceProvider extends ServiceProvider
             __DIR__.'/../logincentral.php' => config_path('logincentral.php')
         ], 'login-central-config');
 
+      
     }
 
     public $optionsLogin=null;
@@ -28,6 +29,7 @@ class LoginCentralServiceProvider extends ServiceProvider
      */
     public function register()
     {
+
         $this->loadRoutesFrom(__DIR__ . '/../routes.php');
         $this->app->make('Eliberio\LoginCentral\Controllers\ProcessLoginController');
         $this->mergeConfigFrom(

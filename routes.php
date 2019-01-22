@@ -7,5 +7,4 @@
  */
 Route::group(['middleware' => ['web']], function () {
 	Route::get('extends-login-elv', 'Eliberio\LoginCentral\Controllers\ProcessLoginController@login');
-	Route::get('extends-logout-elv', 'Eliberio\LoginCentral\Controllers\ProcessLoginController@logout')->middleware('login');
 });

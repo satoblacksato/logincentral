@@ -57,16 +57,5 @@ class ProcessLoginController extends Controller
         Auth::guard('web')->login($user, true);
         return redirect()->route('home');
     }
-
-    public function logout(Request $request)
-    {
-        $this->validate($request,[
-            'user_key'=>'required|in:'.config('logincentral.user_key'),
-            'pass_key'=>'required|in:'.config('logincentral.pass_key')
-        ]);
-
-
-        Auth::logout();
-        return response()->json(['proceso de logout exitoso'],200);
-    }
+    
 }
