@@ -9,4 +9,4 @@ Componente que permite gestionar el login de una aplicación central
   - composer require satoblacksato/logincentral "v1.0.1"
   - php artisan vendor:publish 
             se escoge el tag 14 
-  - **LoginCentralMiddleware::class** se debe agregar en $middlewareGroups del archivo kernel de app/http/Kernel.php en el array web
+  - **LoginCentralMiddleware::class** se debe agregar en $middlewareGroups del archivo kernel de app/http/Kernel.php en el array web con su respectivo use Eliberio\LoginCentral\LoginCentralMiddleware; en la parte superior de la clase
